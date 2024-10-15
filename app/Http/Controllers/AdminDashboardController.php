@@ -12,7 +12,7 @@ class AdminDashboardController extends Controller
 {
     public function index()
     {
-        // You can gather various statistics to display on the dashboard
+        
         $userCount = User::count();
         $productCount = Product::count();
         $cmsCount = CMS::count();
