@@ -61,7 +61,8 @@ Route::middleware(['auth', 'role:Super Admin'])->group(function () {
     Route::get('/admin/cms/create', [CMSController::class, 'create'])->name('admin.cms.create');
     Route::post('/admin/cms', [CMSController::class, 'store'])->name('admin.cms.store');
     Route::get('/admin/cms/{cms}/edit', [CMSController::class, 'edit'])->name('admin.cms.edit');
-    Route::put('/admin/cms/{cms}', [CMSController::class, 'update'])->name('admin.cms.update');
+    Route::put('/admin/cms/{cmsPage}', [CMSController::class, 'update'])->name('admin.cms.update');
+
     Route::delete('/admin/cms/{cms}', [CMSController::class, 'destroy'])->name('admin.cms.destroy');
 
     // Product management routes

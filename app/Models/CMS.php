@@ -9,4 +9,10 @@ class CMS extends Model
 {
     use HasFactory;
     protected $table = 'c_m_s_pages';
+    protected $fillable = [
+        'title',
+       
+        'content',
+    // Allowing the CSRF token to be mass-assigned
+    ];
 }

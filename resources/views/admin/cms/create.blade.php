@@ -1,39 +1,50 @@
-@extends('layouts.app')
-
-@section('content')
-<div class="container">
-    <h1>Add CMS Page</h1>
-
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
-
-    <form action="{{ route('admin.cms.store') }}" method="POST">
-        @csrf
-        <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
-            <input type="text" class="form-control" id="title" name="title" required>
-        </div>
-        <div class="mb-3">
-            <label for="slug" class="form-label">Slug</label>
-            <input type="text" class="form-control" id="slug" name="slug" required>
-        </div>
-        <div class="mb-3">
-            <label for="content" class="form-label">Content</label>
-            <textarea class="form-control" id="content" name="content" rows="5" required></textarea>
-        </div>
-        <div class="mb-3">
-            <label for="is_active" class="form-label">Active</label>
-            <input type="checkbox" id="is_active" name="is_active" checked>
-        </div>
-        <button type="submit" class="btn btn-primary">Save</button>
-        <a href="{{ route('admin.cms.index') }}" class="btn btn-secondary">Cancel</a>
-    </form>
-</div>
-@endsection
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Create CMS Page') }}
+        </h2>
+    </x-slot>
+  
+    <div class="flex">
+      <!-- Sidebar -->
+      <div class="w-64 bg-gray-800 text-white min-h-screen">
+          <div class="p-6">
+              <h3 class="text-2xl font-semibold">Admin Panel</h3>
+          </div>
+  
+          <!-- Sidebar Links -->
+          <nav class="mt-6">
+              <a href="{{ route('admin.users.index') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
+                  <i class="fas fa-users mr-2"></i> Users
+              </a>
+              <a href="{{ route('admin.products.index') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
+                  <i class="fas fa-box-open mr-2"></i> Products
+              </a>
+              <a href="{{ route('admin.cms.index') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
+                  <i class="fas fa-file-alt mr-2"></i> CMS Pages
+              </a>
+              <a href="{{ route('admin.roles.index') }}" class="block py-2.5 px-4 rounded transition duration-200 hover:bg-gray-700">
+                  <i class="fas fa-user-shield mr-2"></i> Assign Role
+              </a>
+          </nav>
+      </div>
+  
+      <!-- Main Content -->
+      <div class="container mx-auto">
+        <form action="{{ route('admin.cms.store') }}" method="POST" class="bg-white p-6 shadow-md rounded-md">
+          @csrf
+          <div class="mb-4">
+              <label for="title" class="block text-sm font-medium text-gray-700">Page Title</label>
+              <input type="text" id="title" name="title" value="{{ old('title') }}" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md">
+          </div>
+          <div class="mb-4">
+              <label for="content" class="block text-sm font-medium text-gray-700">Content</label>
+              <textarea id="content" name="content" rows="6" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md">{{ old('content') }}</textarea>
+          </div>
+  
+          <button type="submit" class="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">Create Page</button>
+        </form>
+      </div>
+    </div>
+  </x-app-layout>
+  

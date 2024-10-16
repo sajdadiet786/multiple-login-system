@@ -1,40 +1,42 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __('Edit CMS Page') }}
+        </h2>
+    </x-slot>
 
-@section('content')
-<div class="container">
-    <h1>Edit CMS Page</h1>
+    <div class="container mx-auto">
+        <form action="{{ route('admin.cms.update', $cmsPage->id) }}" method="POST" class="bg-white p-6 shadow-md rounded-md">
 
-    @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+            @csrf
+            @method('PUT')
 
-    <form action="{{ route('admin.cms.update', $cmsPage) }}" method="POST">
-        @csrf
-        @method('PUT')
-        <div class="mb-3">
-            <label for="title" class="form-label">Title</label>
-            <input type="text" class="form-control" id="title" name="title" value="{{ old('title', $cmsPage->title) }}" required>
-        </div>
-        <div class="mb-3">
-            <label for="slug" class="form-label">Slug</label>
-            <input type="text" class="form-control" id="slug" name="slug" value="{{ old('slug', $cmsPage->slug) }}" required>
-        </div>
-        <div class="mb-3">
-            <label for="content" class="form-label">Content</label>
-            <textarea class="form-control" id="content" name="content" rows="5" required>{{ old('content', $cmsPage->content) }}</textarea>
-        </div>
-        <div class="mb-3">
-            <label for="is_active" class="form-label">Active</label>
-            <input type="checkbox" id="is_active" name="is_active" {{ $cmsPage->is_active ? 'checked' : '' }}>
-        </div>
-        <button type="submit" class="btn btn-primary">Update</button>
-        <a href="{{ route('admin.cms.index') }}" class="btn btn-secondary">Cancel</a>
-    </form>
-</div>
-@endsection
+            <div class="mb-4">
+                <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+                <input type="text" id="title" name="title" value="{{ old('title', $cmsPage->title) }}" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md">
+            </div>
+
+            <div class="mb-4">
+                <label for="slug" class="block text-sm font-medium text-gray-700">Slug</label>
+                <input type="text" id="slug" name="slug" value="{{ old('slug', $cmsPage->slug) }}" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md">
+            </div>
+
+            <div class="mb-4">
+                <label for="content" class="block text-sm font-medium text-gray-700">Content</label>
+                <textarea id="content" name="content" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md">{{ old('content', $cmsPage->content) }}</textarea>
+            </div>
+
+            <div class="mb-4">
+                <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
+                <select id="status" name="status" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md">
+                    <option value="1" {{ $cmsPage->status ? 'selected' : '' }}>Active</option>
+                    <option value="0" {{ !$cmsPage->status ? 'selected' : '' }}>Inactive</option>
+                </select>
+            </div>
+
+            <button type="submit" class="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
+                Update Page
+            </button>
+        </form>
+    </div>
+</x-app-layout>
