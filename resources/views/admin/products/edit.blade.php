@@ -47,7 +47,7 @@
                 <!-- Price Input -->
                 <div class="mb-4">
                     <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
-                    <input type="text" id="price" name="price" value="{{ old('price', $product->price) }}" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500" required>
+                    <input type="number" id="price" name="price" value="{{ old('price', $product->price) }}" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500" required>
                     @error('price')
                         <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
                     @enderror
@@ -68,6 +68,21 @@
                     @endif
                 </div>
 
+                <!-- Select Users for Product with Select2 -->
+                <div class="mb-4">
+                    <label for="users" class="block text-sm font-medium text-gray-700">Assign Users to Product</label>
+                    <select name="users[]" id="users" class="form-control mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md" multiple>
+                        @foreach($users as $user)
+                            <option value="{{ $user->id }}" {{ in_array($user->id, $product->users->pluck('id')->toArray()) ? 'selected' : '' }}>
+                                {{ $user->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('users')
+                        <div class="text-red-600 text-sm mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+
                 <!-- Submit Button -->
                 <button type="submit" class="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
                     Update Product
@@ -77,8 +92,20 @@
     </div>
 </x-app-layout>
 
+<!-- Include Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+<!-- Include jQuery and Select2 JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
 <script>
-  document.getElementById('roles').addEventListener('change', function() {
-      this.blur();  // Causes the dropdown to close after selection
-  });
+    $(document).ready(function() {
+        // Initialize Select2 on the users dropdown
+        $('#users').select2({
+            placeholder: 'Select users', // Placeholder text
+            allowClear: true,            // Enable clearing the selection
+            width: '100%'                // Make sure the dropdown uses the full width
+        });
+    });
 </script>

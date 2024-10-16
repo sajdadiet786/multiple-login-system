@@ -4,21 +4,36 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 class ProductController extends Controller
 {
-    public function index(Request $request)
-    {
-        $products = Product::paginate(10); // Server-side pagination
-        return view('admin.products.index', compact('products'));
+    public function index()
+{
+    $user = Auth::user();
+
+    // If the user is Super Admin, show all products
+    if ($user->hasRole('Super Admin')) {
+        $products = Product::paginate(5); // Server-side pagination
+    } else {
+        // Otherwise, show only the products assigned to this user
+        $products = $user->products()->paginate(5);
     }
+
+    return view('admin.products.index', compact('products'));
+}
+
 
     // Show the form for creating a new product
     public function create()
     {
-        return view('admin.products.create');
+        $users = User::all(); // Fetch all users
+    
+        return view('admin.products.create', compact('users'));
     }
+    
 
     // Store a newly created product
     public function store(Request $request)
@@ -46,12 +61,12 @@ class ProductController extends Controller
         
     
         // Create a new product
-        Product::create([
+        $product = Product::create([
             'name' => $request->name,
             'price' => $request->price,
             'image' => $imagePath,
         ]);
-    
+        $product->users()->attach($request->users);
         return redirect()->route('admin.products.index')->with('success', 'Product created successfully.');
     }
     
@@ -59,7 +74,8 @@ class ProductController extends Controller
     // Show the form for editing a product
     public function edit(Product $product)
     {
-        return view('admin.products.edit', compact('product'));
+        $users = User::all();   
+        return view('admin.products.edit', compact('product','users'));
     }
 
     // Update an existing product
@@ -69,7 +85,7 @@ class ProductController extends Controller
         $price = $request->input('price');
         $description = $request->input('description');
         $image = $request->file('image');
-
+        $users = $request->input('users'); 
         // Update image if provided
         if ($image) {
             // Delete the old image
@@ -87,7 +103,10 @@ class ProductController extends Controller
             'price' => $price,
             'description' => $description,
         ]);
-
+        if ($users) {
+            // Sync the selected users (removes any previously assigned users and attaches the new ones)
+            $product->users()->sync($users);
+        }
         return redirect()->route('admin.products.index')->with('success', 'Product updated successfully.');
     }
 

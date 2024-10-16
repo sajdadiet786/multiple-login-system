@@ -8,8 +8,11 @@
         <!-- Sidebar -->
         <div class="w-64 bg-gray-800 text-white min-h-screen">
             <div class="p-6">
-                <h3 class="text-2xl font-semibold">Admin Panel</h3>
+                <h3 class="text-2xl font-semibold">
+                    <a href="{{ route('admin.dashboard') }}" class="text-white hover:text-gray-300">Admin Panel</a>
+                </h3>
             </div>
+            
 
             <!-- Sidebar Links -->
             <nav class="mt-6">

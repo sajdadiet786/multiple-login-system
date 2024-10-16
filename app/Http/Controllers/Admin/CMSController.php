@@ -10,7 +10,7 @@ class CMSController extends Controller
 {
     public function index()
     {
-        $pages = CMS::paginate(10);
+        $pages = CMS::paginate(5);
         return view('admin.cms.index', compact('pages'));
     }
 

@@ -9,8 +9,11 @@
     <!-- Sidebar -->
     <div class="w-64 bg-gray-800 text-white min-h-screen">
         <div class="p-6">
-            <h3 class="text-2xl font-semibold">Admin Panel</h3>
+            <h3 class="text-2xl font-semibold">
+                <a href="{{ route('admin.dashboard') }}" class="text-white hover:text-gray-300">Admin Panel</a>
+            </h3>
         </div>
+        
 
         <!-- Sidebar Links -->
         <nav class="mt-6">
@@ -56,11 +59,9 @@
         <!-- Roles Selection -->
         <div class="mb-4">
             <label for="roles" class="block text-sm font-medium text-gray-700">Roles</label>
-            <select id="roles" name="roles[]" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500" multiple>
+            <select id="roles" name="roles" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500">
                 @foreach($roles as $role)
-                    <option value="{{ $role->id }}" {{ in_array($role->id, old('roles', $user->roles->pluck('id')->toArray())) ? 'selected' : '' }}>
-                        {{ $role->name }}
-                    </option>
+                    <option value="{{ $role->name}}" {{ old('roles') == $role->name ? 'selected' : '' }}>{{ $role->name }}</option>
                 @endforeach
             </select>
         </div>
@@ -79,3 +80,14 @@
       this.blur();  // Causes the dropdown to close after selection
   });
 </script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script>
+        // Adding an event listener to the 'roles' dropdown
+        document.getElementById('roles').addEventListener('change', function() {
+            // Close the dropdown after selection by blurring the input
+            this.blur();
+        });
+    </script>

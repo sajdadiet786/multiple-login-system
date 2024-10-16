@@ -10,7 +10,7 @@ class RoleController extends Controller
 {
     public function index()
 {
-    $roles = Role::paginate(10);  // You can change the number 10 to any number of items per page.
+    $roles = Role::paginate(5);  // You can change the number 10 to any number of items per page.
     return view('admin.roles.index', compact('roles'));
 }
 
